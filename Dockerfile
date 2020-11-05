@@ -20,5 +20,5 @@ RUN bash install_libwebsockets.sh
 COPY install_janus.sh .
 RUN bash install_janus.sh
 
-EXPOSE 8188
+EXPOSE 8088/tcp 8188/tcp 8188/udp
 CMD ["/opt/janus/bin/janus"]

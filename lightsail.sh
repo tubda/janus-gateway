@@ -2,78 +2,32 @@
 
 # Install janus on AWS Lightsail
 
-#Install dependencies
-apt-get update && \
-	apt-get install -y --no-install-recommends \
-  git\
-  libmicrohttpd-dev\
-  libjansson-dev\
-  libssl-dev\
-  libsrtp-dev\
-  libsofia-sip-ua-dev\
-  libglib2.0-dev\
-  libopus-dev\
-  libogg-dev\
-  libcurl4-openssl-dev\
-  liblua5.3-dev\
-  libconfig-dev\
-  pkg-config\
-  gengetopt\
-  libtool\
-  automake\
-  gtk-doc-tools\
-  cmake\
-  ninja-build\
-  python3-pip\
-  wget\
-  make &&\
-  rm -rf /var/lib/apt/lists/*
+sudo apt-get update && sudo apt-get install git
 
-# Install libnice
-cd ~/
-pip3 install meson
-git clone https://gitlab.freedesktop.org/libnice/libnice.git && \
-cd libnice && \
-meson --prefix=/usr build && \
-ninja -C build && \
-ninja -C build install
+# install latest version of docker the lazy way
+curl -sSL https://get.docker.com | sh
 
-# Install libsrtp
-cd ~/
-wget https://github.com/cisco/libsrtp/archive/v2.2.0.tar.gz
-tar xfv v2.2.0.tar.gz
-cd libsrtp-2.2.0
-./configure --prefix=/usr --enable-openssl
-make shared_library && make install
+# make it so you don't need to sudo to run docker commands
+usermod -aG docker ubuntu
 
-# Install usrsctp
-cd ~/
-git clone https://github.com/sctplab/usrsctp
-cd usrsctp
-./bootstrap
-./configure --prefix=/usr --disable-programs --disable-inet --disable-inet6
-make && make install
+# install docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
-# Install libwebsockets
-cd ~/
-git clone https://github.com/warmcat/libwebsockets.git
-cd libwebsockets
-# If you want to use the latest master version of libwebsockets, comment the next line
-git checkout v4.1-stable
-mkdir build
-cd build
-# See https://github.com/meetecho/janus-gateway/issues/732 re: LWS_MAX_SMP
-cmake -DLWS_MAX_SMP=1 -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" ..
-make && make install
+# clone our janus-gateway repo
+cd /srv
+git clone https://github.com/tubda/janus-gateway.git && cd janus-gateway
 
-# Install Janus
-cd ~/
-git clone https://github.com/meetecho/janus-gateway.git
-cd janus-gateway
-sh autogen.sh
-./configure --prefix=/opt/janus
-make && make install
-make configs
+# copy the dockerfile into /srv/docker
+# if you change this, change the systemd service file to match
+# WorkingDirectory=[whatever you have below]
+# mkdir /srv/docker
+# curl -o /srv/docker/docker-compose.yml https://raw.githubusercontent.com/mikegcoleman/todo/master/docker-compose.yml
 
-# start janus
-/opt/janus/bin/janus
+# copy in systemd unit file and register it so our compose file runs
+# on system restart
+cp docker-compose-app.service /etc/systemd/system/docker-compose-app.service
+systemctl enable docker-compose-app
+
+# start up the application via docker-compose
+docker-compose -f docker-compose.yml up -d

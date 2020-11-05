@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+  janus-gateway:
+    build: .
+    ports:
+      - "8088:8088/tcp"
+      - "8188:8188/tcp"
+      - "8188:8188/udp"
