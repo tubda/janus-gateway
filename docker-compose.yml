@@ -4,4 +4,6 @@ services:
   janus-gateway:
     build: .
     ports:
-      - "80:8188/tcp"
+      - "8088:8088/tcp"
+      - "8188:8188/tcp"
+      - "8188:8188/udp"
