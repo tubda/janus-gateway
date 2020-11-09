@@ -26,4 +26,4 @@ packagelist=(
     make
 )
 
-apt-get install ${packagelist[@]} -y
+sudo apt-get install ${packagelist[@]} -y
