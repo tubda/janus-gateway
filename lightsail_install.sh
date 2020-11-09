@@ -8,22 +8,22 @@ sudo apt-get update && sudo apt-get install git
 cd /srv
 git clone https://github.com/tubda/janus-gateway.git && cd janus-gateway
 
-chmod x+ install_dependencies.sh
+sudo chmod +x install_dependencies.sh
 install_dependencies.sh
 
-chmod x+ install_libnice.sh
+sudo chmod +x install_libnice.sh
 install_libnice.sh
 
-chmod x+ install_libsrtp.sh
+sudo chmod +x install_libsrtp.sh
 install_libsrtp.sh
 
-chmod x+ install_usrsctp.sh
+sudo chmod +x install_usrsctp.sh
 install_usrsctp.sh
 
-chmod x+ install_libwebsockets.sh
+sudo chmod +x install_libwebsockets.sh
 install_libwebsockets.sh
 
-chmod x+ install_janus.sh
+sudo chmod +x install_janus.sh
 install_janus.sh
 
 # chmod x+ setup_ssl.sh
