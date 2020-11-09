@@ -1,13 +1,7 @@
 #!/bin/bash
+# Install janus it's dependencies, then start janus.
 
-# Install janus on AWS Lightsail
-
-sudo apt-get update && sudo apt-get install git
-
-# clone our janus-gateway repo
-cd /srv
-git clone https://github.com/tubda/janus-gateway.git && cd janus-gateway
-
+# Run this script from janus-gateway dir, on the lightsail inance terminal
 sudo chmod +x install_dependencies.sh
 install_dependencies.sh
 
