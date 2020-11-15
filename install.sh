@@ -20,8 +20,5 @@ sudo chmod +x install_libwebsockets.sh
 sudo chmod +x install_janus.sh
 ./install_janus.sh
 
-# chmod x+ setup_ssl.sh
-# setup_ssl.sh
-
 # start janus
 /opt/janus/bin/janus
